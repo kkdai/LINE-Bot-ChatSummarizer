@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "command": "go",
+    "options": {
+        "env": {
+            "GOPATH": "/Users/Evan/src/go"
+        }
+    },
+    "tasks": [
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "install",
+                "-v",
+                "./..."
+            ],
+            "problemMatcher": [],
+            "group": {
+                "_id": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "test",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "test",
+                "-v",
+                "./..."
+            ],
+            "problemMatcher": [],
+            "group": {
+                "_id": "test",
+                "isDefault": false
+            }
+        }
+    ]
+}
