@@ -70,20 +70,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						Prompt: []string{
 							message.Text,
 						},
-						MaxTokens:   gpt3.IntPtr(3000),
+						MaxTokens:   gpt3.IntPtr(2048),
 						Temperature: gpt3.Float32Ptr(0),
 					})
 					if err != nil {
-						fmt.Println(err)
-						os.Exit(13)
+						reply = fmt.Sprintf("Err: %v", err)
+
+					} else {
+						reply = resp.Choices[0].Text
 					}
-					reply = resp.Choices[0].Text
-				}
 
-				for _, mentionee := range message.Mention.Mentionees {
-					log.Println(mentionee.UserID)
 				}
-
 				// message.ID: Msg unique ID
 				// message.Text: Msg text
 				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
