@@ -13,24 +13,36 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
+	"strings"
 
+	gpt3 "github.com/PullRequestInc/go-gpt3"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
 var bot *linebot.Client
+var client gpt3.Client
 
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
+
 	http.HandleFunc("/callback", callbackHandler)
+
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
+	apiKey := os.Getenv("ChatGptToken")
+	client = gpt3.NewClient(apiKey)
+
+	if apiKey == "" {
+		panic("Missing API KEY")
+	}
+
 	http.ListenAndServe(addr, nil)
 }
 
@@ -51,14 +63,27 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			// Handle only on text message
 			case *linebot.TextMessage:
-				// GetMessageQuota: Get how many remain free tier push message quota you still have this month. (maximum 500)
-				quota, err := bot.GetMessageQuota().Do()
-				if err != nil {
-					log.Println("Quota err:", err)
+				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
+
+				if strings.Contains("gpt:", message.Text) {
+					ctx := context.Background()
+					resp, err := client.Completion(ctx, gpt3.CompletionRequest{
+						Prompt: []string{
+							"test",
+						},
+						MaxTokens:   gpt3.IntPtr(3000),
+						Temperature: gpt3.Float32Ptr(0),
+					})
+					if err != nil {
+						fmt.Println(err)
+						os.Exit(13)
+					}
+					reply = resp.Choices[0].Text
 				}
+
 				// message.ID: Msg unique ID
 				// message.Text: Msg text
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("msg ID:"+message.ID+":"+"Get:"+message.Text+" , \n OK! remain message:"+strconv.FormatInt(quota.Value, 10))).Do(); err != nil {
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 					log.Print(err)
 				}
 
