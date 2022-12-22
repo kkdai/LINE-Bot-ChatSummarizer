@@ -13,34 +13,38 @@ LINE Bot Chat Summarizer: Use ChatGPT to summarize your group chat as a chat sum
 How to use this
 =============
 
-### 1. Got A LINE Bot API devloper account
+### To obtain a LINE Bot API developer account
 
-- [Make sure you already registered on LINE developer console](https://developers.line.biz/console/), if you need use LINE Bot.
+Make sure you are registered on the LINE developer console at <https://developers.line.biz/console/> if you want to use a LINE Bot.
 
-- Create new Messaging Channel
-- Get `Channel Secret` on "Basic Setting" tab.
-- Issue `Channel Access Token` on "Messaging API" tab.
-- Open LINE OA manager from "Basic Setting" tab.
-- Go to Reply setting on OA manager, enable "webhook"
+Create a new Messaging Channel and get the "Channel Secret" on the "Basic Setting" tab.
 
-### 2. Just Deploy this on Heroku
+Issue a "Channel Access Token" on the "Messaging API" tab.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+Open the LINE OA manager from the "Basic Setting" tab and go to the Reply setting on the OA manager. Enable "webhook" there.
 
-- Input `Channel Secret` and `Channel Access Token`.
-- Remember your heroku, ID.
+### To obtain an OpenAI API token
 
-### 3. Go to LINE Bot Dashboard, setup basic API
+Register for an account on the OpenAI website at <https://openai.com/api/>.
 
-- Setup your basic account information. Here is some info you will need to know.
-- `Callback URL`: <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>
+Once you have an account, you can find your API token in the account settings page.
 
-It all done.
+If you want to use the OpenAI API for development, you can find more information and instructions in the API documentation page.
 
-### Video Tutorial
+Please note that the OpenAI API is only available to users who meet certain criteria. You can find more information about the usage conditions and limitations of the API in the API documentation page.
 
-- [How to deploy LINE BotTemplate](https://www.youtube.com/watch?v=0BIknEz1f8k)
-- [Hoe to modify your LINE BotTemplate code](https://www.youtube.com/watch?v=ckij73sIRik)
+### To deploy this on Heroku
+
+Click the "Deploy" button at <https://www.herokucdn.com/deploy/button.svg>.
+
+Input the "Channel Secret", "Channel Access Token", and "ChatGPT Access Token".
+
+Remember your Heroku server ID.
+
+To set up the basic API in the LINE Bot Dashboard:
+
+Set up your basic account information, including the "Callback URL" at <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>.
+That's it! You're done.
 
 License
 ---------------

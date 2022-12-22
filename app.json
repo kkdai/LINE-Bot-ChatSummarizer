@@ -16,6 +16,10 @@
     }
   ],
   "env": {
+    "ChatGptToken": {
+      "description": "ChatGPT Access Token",
+      "required": true
+    },
     "ChannelAccessToken": {
       "description": "Channel Access Token",
       "required": true
