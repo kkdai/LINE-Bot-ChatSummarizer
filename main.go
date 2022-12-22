@@ -32,17 +32,15 @@ func main() {
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
-	http.HandleFunc("/callback", callbackHandler)
-
 	port := os.Getenv("PORT")
-	addr := fmt.Sprintf(":%s", port)
 	apiKey := os.Getenv("ChatGptToken")
-	client = gpt3.NewClient(apiKey)
 
-	if apiKey == "" {
-		panic("Missing API KEY")
+	if apiKey != "" {
+		client = gpt3.NewClient(apiKey)
 	}
 
+	http.HandleFunc("/callback", callbackHandler)
+	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
 }
 
