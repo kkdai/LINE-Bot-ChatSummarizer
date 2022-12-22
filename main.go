@@ -63,11 +63,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
 
-				if strings.Contains("gpt:", message.Text) {
+				// Directly as ChatGPT
+				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
 					resp, err := client.Completion(ctx, gpt3.CompletionRequest{
 						Prompt: []string{
-							"test",
+							message.Text,
 						},
 						MaxTokens:   gpt3.IntPtr(3000),
 						Temperature: gpt3.Float32Ptr(0),
@@ -77,6 +78,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						os.Exit(13)
 					}
 					reply = resp.Choices[0].Text
+				}
+
+				for _, mentionee := range message.Mention.Mentionees {
+					log.Println(mentionee.UserID)
 				}
 
 				// message.ID: Msg unique ID
