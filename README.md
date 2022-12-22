@@ -1,5 +1,4 @@
-LINE Bot Chat Summarizer: Use ChatGPT to summarize your group chat as a chat summarizer with the LINE Bot Chat Summarizer.
-
+LINE Bot Chat Summarizer: Use ChatGPT to summarize your group chat as a chat summarizer with the LINE Bot Chat Summarizer
 ==============
 
 [![Join the chat at https://gitter.im/kkdai/LINE-Bot-ChatSummarizer](https://badges.gitter.im/kkdai/LINE-Bot-ChatSummarizer.svg)](https://gitter.im/kkdai/LINE-Bot-ChatSummarizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
