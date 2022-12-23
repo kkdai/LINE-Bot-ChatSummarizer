@@ -19,6 +19,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	gpt3 "github.com/sashabaranov/go-gpt3"
@@ -26,9 +27,11 @@ import (
 
 var bot *linebot.Client
 var client *gpt3.Client
+var summaryQueue GroupStorage
 
 func main() {
 	var err error
+	summaryQueue = make(GroupStorage)
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
@@ -63,6 +66,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
 
+				// If chatbot in a group, start to save string
+				if event.Source.GroupID != "" {
+					q := summaryQueue[event.Source.GroupID]
+					m := MsgDetail{}
+					m.SaveMsg(message.Text, event.Source.UserID, time.Now())
+					summaryQueue[event.Source.GroupID] = append(q, m)
+				}
+
 				// Directly as ChatGPT
 				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
@@ -78,11 +89,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					} else {
 						reply = resp.Choices[0].Text
 					}
-				}
-				// message.ID: Msg unique ID
-				// message.Text: Msg text
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
-					log.Print(err)
+					// message.ID: Msg unique ID
+					// message.Text: Msg text
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+						log.Print(err)
+					}
+				} else if strings.EqualFold(message.Text, ":sum_all") {
+					q := summaryQueue[event.Source.GroupID]
+					for _, m := range q {
+						reply = reply + fmt.Sprintf("[%s]: %s . %s", m.UserID, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
+					}
 				}
 
 			// Handle only on Sticker message
