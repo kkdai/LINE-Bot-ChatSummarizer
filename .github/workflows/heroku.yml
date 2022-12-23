@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy To Heroku
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - master
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+      - name: Deploy to Heroku
+        uses: heroku/deploy-to-heroku-action@v2
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "group-summarizer-linebot" #Must be unique in Heroku
-          heroku_email: "evanslin@gmail.com"
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          app_name: group-summarizer-linebot
