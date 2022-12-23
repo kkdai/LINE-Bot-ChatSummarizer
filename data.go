@@ -11,9 +11,3 @@ type MsgDetail struct {
 type GroupData []MsgDetail
 
 type GroupStorage map[string]GroupData
-
-func (m MsgDetail) SaveMsg(text string, uid string, time time.Time) {
-	m.MsgText = text
-	m.UserID = uid
-	m.Time = time
-}

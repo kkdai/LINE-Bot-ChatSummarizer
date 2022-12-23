@@ -69,11 +69,14 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				// If chatbot in a group, start to save string
 				if event.Source.GroupID != "" {
 					q := summaryQueue[event.Source.GroupID]
-					m := MsgDetail{}
-					m.SaveMsg(message.Text, event.Source.UserID, time.Now())
+					m := MsgDetail{
+						MsgText: message.Text,
+						UserID:  event.Source.UserID,
+						Time:    time.Now(),
+					}
 					log.Println("Save msg:", m)
 					summaryQueue[event.Source.GroupID] = append(q, m)
-					log.Println("all msg:", q)
+					log.Println("All msg:", q)
 				}
 
 				// Directly as ChatGPT
