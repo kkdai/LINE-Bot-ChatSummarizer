@@ -1,6 +1,8 @@
 # github.com/PullRequestInc/go-gpt3 v1.1.10
 ## explicit; go 1.13
-github.com/PullRequestInc/go-gpt3
 # github.com/line/line-bot-sdk-go/v7 v7.18.0
 ## explicit; go 1.19
 github.com/line/line-bot-sdk-go/v7/linebot
+# github.com/sashabaranov/go-gpt3 v0.0.0-20221216095610-1c20931ead68
+## explicit; go 1.17
+github.com/sashabaranov/go-gpt3
