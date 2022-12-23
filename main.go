@@ -19,6 +19,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	gpt3 "github.com/sashabaranov/go-gpt3"
@@ -67,8 +68,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				// If chatbot in a group, start to save string
 				if event.Source.GroupID != "" {
-					// summaryQueue[event.Source.GroupID] = summaryQueue[event.Source.GroupID] + message.Text
+					q := summaryQueue[event.Source.GroupID]
+					m := MsgDetail{}
+					m.SaveMsg(message.Text, event.Source.UserID, time.Now())
+					summaryQueue[event.Source.GroupID] = append(q, m)
 				}
+
 				// Directly as ChatGPT
 				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
@@ -88,6 +93,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					// message.Text: Msg text
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
+					}
+				} else if strings.EqualFold(message.Text, ":sum_all") {
+					q := summaryQueue[event.Source.GroupID]
+					for _, m := range q {
+						reply = reply + fmt.Sprintf("[%s]: %s . %s", m.UserID, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
 				}
 
