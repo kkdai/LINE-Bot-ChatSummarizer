@@ -20,12 +20,12 @@ import (
 	"os"
 	"strings"
 
-	gpt3 "github.com/PullRequestInc/go-gpt3"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
+	gpt3 "github.com/sashabaranov/go-gpt3"
 )
 
 var bot *linebot.Client
-var client gpt3.Client
+var client *gpt3.Client
 
 func main() {
 	var err error
@@ -66,13 +66,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				// Directly as ChatGPT
 				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
-					resp, err := client.Completion(ctx, gpt3.CompletionRequest{
-						Prompt: []string{
-							message.Text,
-						},
-						MaxTokens:   gpt3.IntPtr(2048),
-						Temperature: gpt3.Float32Ptr(0),
-					})
+					req := gpt3.CompletionRequest{
+						Model:     gpt3.GPT3TextDavinci001,
+						MaxTokens: 300,
+						Prompt:    message.Text,
+					}
+					resp, err := client.CreateCompletion(ctx, req)
 					if err != nil {
 						reply = fmt.Sprintf("Err: %v", err)
 
