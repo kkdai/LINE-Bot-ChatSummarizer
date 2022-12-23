@@ -67,7 +67,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
 					req := gpt3.CompletionRequest{
-						Model:     gpt3.GPT3TextDavinci001,
+						Model:     gpt3.GPT3TextDavinci003,
 						MaxTokens: 300,
 						Prompt:    message.Text,
 					}
@@ -78,7 +78,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					} else {
 						reply = resp.Choices[0].Text
 					}
-
 				}
 				// message.ID: Msg unique ID
 				// message.Text: Msg text
