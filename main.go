@@ -99,6 +99,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					for _, m := range q {
 						reply = reply + fmt.Sprintf("[%s]: %s . %s", m.UserID, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
 
 			// Handle only on Sticker message
