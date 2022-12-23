@@ -26,9 +26,11 @@ import (
 
 var bot *linebot.Client
 var client *gpt3.Client
+var summaryQueue GroupStorage
 
 func main() {
 	var err error
+	summaryQueue = make(GroupStorage)
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
@@ -63,6 +65,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
 
+				// If chatbot in a group, start to save string
+				if event.Source.GroupID != "" {
+					// summaryQueue[event.Source.GroupID] = summaryQueue[event.Source.GroupID] + message.Text
+				}
 				// Directly as ChatGPT
 				if strings.Contains(message.Text, "gpt:") {
 					ctx := context.Background()
@@ -78,11 +84,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					} else {
 						reply = resp.Choices[0].Text
 					}
-				}
-				// message.ID: Msg unique ID
-				// message.Text: Msg text
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
-					log.Print(err)
+					// message.ID: Msg unique ID
+					// message.Text: Msg text
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
 
 			// Handle only on Sticker message
