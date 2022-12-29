@@ -3,6 +3,36 @@ LINE Bot Chat Summarizer: Use ChatGPT to summarize your group chat as a chat sum
 
 [![Join the chat at https://gitter.im/kkdai/LINE-Bot-ChatSummarizer](https://badges.gitter.im/kkdai/LINE-Bot-ChatSummarizer.svg)](https://gitter.im/kkdai/LINE-Bot-ChatSummarizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![GoDoc](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer.svg?status.svg)](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer)  ![Go](https://github.com/kkdai/LINE-Bot-ChatSummarizer/workflows/Go/badge.svg) [![goreportcard.com](https://goreportcard.com/badge/github.com/kkdai/LINE-Bot-ChatSummarizer)](https://goreportcard.com/report/github.com/kkdai/LineBotTemplate)
 
+中文 version, please check [Chinese Version](README.md)
+
+Usage
+=============
+
+- Follow the deployment process in "How to install".
+
+- Add the robot to the group chat room.
+
+![](img/chat_1.png)
+
+- Be able to remember the conversation in the group.
+
+![](img/list_all.png)
+
+- Send a summary of the group's content privately to you.
+
+![](img/sum_all.png)
+
+Related commands
+=============
+
+- `:gpt xxx`: Chat directly with ChatGPT, you can ask him directly.
+
+- `:list_all`: List the message records (all) in the group
+
+- `:sum_all`: Do a message summary for you.
+
+Related limitations
+Currently, the original code of this LINE Bot is not bound to a database, so all conversation records are stored in memory. There may be drawbacks such as forgetting or being unable to store after a restart (the next day) or exceeding the limit.
 How to use this
 =============
 
