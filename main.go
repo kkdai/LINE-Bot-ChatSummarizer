@@ -68,11 +68,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				// If chatbot in a group, start to save string
 				if event.Source.GroupID != "" {
+					userName := event.Source.UserID
+					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
+					if err != nil {
+						userName = userProfile.DisplayName
+					}
+
 					q := summaryQueue[event.Source.GroupID]
 					m := MsgDetail{
-						MsgText: message.Text,
-						UserID:  event.Source.UserID,
-						Time:    time.Now(),
+						MsgText:  message.Text,
+						UserName: userName,
+						Time:     time.Now(),
 					}
 					log.Println("Save msg:", m)
 					summaryQueue[event.Source.GroupID] = append(q, m)
@@ -102,7 +108,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				} else if strings.EqualFold(message.Text, ":sum_all") {
 					q := summaryQueue[event.Source.GroupID]
 					for _, m := range q {
-						reply = reply + fmt.Sprintf("[%s]: %s . %s\n", m.UserID, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
+						reply = reply + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
