@@ -3,9 +3,9 @@ package main
 import "time"
 
 type MsgDetail struct {
-	MsgText string
-	UserID  string
-	Time    time.Time
+	MsgText  string
+	UserName string
+	Time     time.Time
 }
 
 type GroupData []MsgDetail
