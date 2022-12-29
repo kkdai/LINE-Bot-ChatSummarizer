@@ -40,9 +40,9 @@ English version, please check [ENG Version](README.en.md)
 
 如果你想使用 LINE Bot，請確保在 <https://developers.line.biz/console/> 註冊 LINE 開發者控制台。
 
-在「基本設定」選項卡上創建新的消息通道並獲取「通道密鑰」。
+在「基本設定」選項卡上創建新的消息通道並獲取「Channel Secret」。
 
-在「消息 API」選項卡上獲取「通道訪問權杖」。
+在「Messiging API」選項卡上獲取「Channel Access Token」。
 
 從「基本設定」選項卡中打開 LINE OA 管理器，然後轉到 OA 管理器的回復設定。在那裡啟用「webhook」。
 
