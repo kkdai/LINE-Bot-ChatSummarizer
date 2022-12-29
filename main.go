@@ -85,7 +85,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				// Directly to ChatGPT
-				if strings.Contains(message.Text, "gpt:") {
+				if strings.Contains(message.Text, ":gpt") {
 					reply = CompleteContext(message.Text)
 
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
