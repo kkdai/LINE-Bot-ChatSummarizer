@@ -58,7 +58,9 @@ Please note that the OpenAI API is only available to users who meet certain crit
 
 ### To deploy this on Heroku
 
-Click the "Deploy" button at <https://www.herokucdn.com/deploy/button.svg>.
+Click the "Deploy" button.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 Input the "Channel Secret", "Channel Access Token", and "ChatGPT Access Token".
 
