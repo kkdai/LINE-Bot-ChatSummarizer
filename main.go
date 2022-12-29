@@ -69,7 +69,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				if event.Source.GroupID != "" {
 					userName := event.Source.UserID
 					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
-					if err != nil {
+					if err == nil {
 						userName = userProfile.DisplayName
 					}
 
@@ -111,7 +111,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 					userName := event.Source.UserID
 					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
-					if err != nil {
+					if err == nil {
 						userName = userProfile.DisplayName
 					}
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("好的，總結文字已經發給您了"+userName)).Do(); err != nil {
