@@ -3,6 +3,8 @@ LINE Bot 聊天摘要生成器：使用 ChatGPT 將你的群聊作為聊天摘�
 
 [![Join the chat at https://gitter.im/kkdai/LINE-Bot-ChatSummarizer](https://badges.gitter.im/kkdai/LINE-Bot-ChatSummarizer.svg)](https://gitter.im/kkdai/LINE-Bot-ChatSummarizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![GoDoc](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer.svg?status.svg)](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer)  ![Go](https://github.com/kkdai/LINE-Bot-ChatSummarizer/workflows/Go/badge.svg) [![goreportcard.com](https://goreportcard.com/badge/github.com/kkdai/LINE-Bot-ChatSummarizer)](https://goreportcard.com/report/github.com/kkdai/LineBotTemplate)
 
+English version, please check [ENG Version](README.en.md)
+
 如何使用
 =============
 
@@ -30,7 +32,7 @@ LINE Bot 聊天摘要生成器：使用 ChatGPT 將你的群聊作為聊天摘�
 
 在 <https://www.herokucdn.com/deploy/button.svg> 上點擊「部署」按鈕。
 
-輸入「通道密鑰」、「通道訪問權杖」和「ChatGPT 訪問權杖」。
+輸入「Channel Secret」、「Channel Access Token」和「ChatGPT Access Token」。
 
 記住你的 Heroku 伺服器 ID。
 
