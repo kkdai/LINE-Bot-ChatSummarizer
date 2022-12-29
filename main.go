@@ -13,7 +13,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -85,31 +84,29 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					log.Println("All msg:", q)
 				}
 
-				// Directly as ChatGPT
+				// Directly to ChatGPT
 				if strings.Contains(message.Text, "gpt:") {
-					ctx := context.Background()
-					req := gpt3.CompletionRequest{
-						Model:     gpt3.GPT3TextDavinci003,
-						MaxTokens: 300,
-						Prompt:    message.Text,
-					}
-					resp, err := client.CreateCompletion(ctx, req)
-					if err != nil {
-						reply = fmt.Sprintf("Err: %v", err)
+					reply = CompleteContext(message.Text)
 
-					} else {
-						reply = resp.Choices[0].Text
-					}
-					// message.ID: Msg unique ID
-					// message.Text: Msg text
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
 					}
-				} else if strings.EqualFold(message.Text, ":sum_all") {
+				} else if strings.EqualFold(message.Text, ":list_all") {
 					q := summaryQueue[event.Source.GroupID]
 					for _, m := range q {
 						reply = reply + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
+
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+						log.Print(err)
+					}
+				} else if strings.EqualFold(message.Text, ":sum_all") {
+					oriContext := ""
+					q := summaryQueue[event.Source.GroupID]
+					for _, m := range q {
+						oriContext = oriContext + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
+					}
+
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
 					}
