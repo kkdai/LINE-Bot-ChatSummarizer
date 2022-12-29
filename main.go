@@ -68,10 +68,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 				// If chatbot in a group, start to save string
 				if event.Source.GroupID != "" {
+					userName := event.Source.UserID
+					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
+					if err != nil {
+						userName = userProfile.DisplayName
+					}
+
 					q := summaryQueue[event.Source.GroupID]
 					m := MsgDetail{
 						MsgText:  message.Text,
-						UserName: event.Source.UserID,
+						UserName: userName,
 						Time:     time.Now(),
 					}
 					log.Println("Save msg:", m)
