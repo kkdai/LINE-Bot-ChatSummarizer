@@ -58,7 +58,9 @@ English version, please check [ENGLISH Version](README_en.md)
 
 ### 部署在 Heroku 上
 
-在 <https://www.herokucdn.com/deploy/button.svg> 上點擊「部署」按鈕。
+在下方上點擊「Deploy」按鈕。
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 輸入「Channel Secret」、「Channel Access Token」和「ChatGPT Access Token」。
 
