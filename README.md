@@ -1,43 +1,74 @@
-LINE Bot Chat Summarizer: Use ChatGPT to summarize your group chat as a chat summarizer with the LINE Bot Chat Summarizer
+LINE Bot 聊天摘要生成器：使用 ChatGPT 將你的群聊作為聊天摘要生成器，與 LINE Bot 聊天摘要生成器一起使用
 ==============
 
 [![Join the chat at https://gitter.im/kkdai/LINE-Bot-ChatSummarizer](https://badges.gitter.im/kkdai/LINE-Bot-ChatSummarizer.svg)](https://gitter.im/kkdai/LINE-Bot-ChatSummarizer?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![GoDoc](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer.svg?status.svg)](https://godoc.org/github.com/kkdai/LINE-Bot-ChatSummarizer)  ![Go](https://github.com/kkdai/LINE-Bot-ChatSummarizer/workflows/Go/badge.svg) [![goreportcard.com](https://goreportcard.com/badge/github.com/kkdai/LINE-Bot-ChatSummarizer)](https://goreportcard.com/report/github.com/kkdai/LineBotTemplate)
 
-How to use this
+English version, please check [ENG Version](README.en.md)
+
+使用方式
 =============
 
-### To obtain a LINE Bot API developer account
+- 依照「如何安裝」進行相關的部署流程。
 
-Make sure you are registered on the LINE developer console at <https://developers.line.biz/console/> if you want to use a LINE Bot.
+- 將機器人加入群組聊天室。
 
-Create a new Messaging Channel and get the "Channel Secret" on the "Basic Setting" tab.
+![](img/chat_1.png)
 
-Issue a "Channel Access Token" on the "Messaging API" tab.
+- 能夠記住群組內的對話。
+  
+![](img/list_all.png)
 
-Open the LINE OA manager from the "Basic Setting" tab and go to the Reply setting on the OA manager. Enable "webhook" there.
+- 直接送群組內容摘要私訊給你。
+![](img/sum_all.png)
 
-### To obtain an OpenAI API token
+### 相關指令如下
 
-Register for an account on the OpenAI website at <https://openai.com/api/>.
+- `:gpt xxx`: 直接對 ChatGPT 來對談，可以直接問他。
 
-Once you have an account, you can find your API token in the account settings page.
+- `:list_all`: 列出群組的訊息紀錄（all)
 
-If you want to use the OpenAI API for development, you can find more information and instructions in the API documentation page.
+- `:sum_all`: 幫你做訊息摘要。
 
-Please note that the OpenAI API is only available to users who meet certain criteria. You can find more information about the usage conditions and limitations of the API in the API documentation page.
+### 相關限制
 
-### To deploy this on Heroku
+目前該 LINE Bot 原始程式碼還沒有綁定相關資料庫，所以都是使用記憶體來儲存相關對話紀錄。可能重開機（隔天）會有忘記的，或是超過就無法儲存的缺點。
 
-Click the "Deploy" button at <https://www.herokucdn.com/deploy/button.svg>.
+如何安裝
+=============
 
-Input the "Channel Secret", "Channel Access Token", and "ChatGPT Access Token".
+### 獲取 LINE Bot API 開發者帳戶
 
-Remember your Heroku server ID.
+如果你想使用 LINE Bot，請確保在 <https://developers.line.biz/console/> 註冊 LINE 開發者控制台。
 
-To set up the basic API in the LINE Bot Dashboard:
+在「基本設定」選項卡上創建新的消息通道並獲取「Channel Secret」。
 
-Set up your basic account information, including the "Callback URL" at <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>.
-That's it! You're done.
+在「Messiging API」選項卡上獲取「Channel Access Token」。
+
+從「基本設定」選項卡中打開 LINE OA 管理器，然後轉到 OA 管理器的回復設定。在那裡啟用「webhook」。
+
+### 獲取 OpenAI API 權杖
+
+在 <https://openai.com/api/> 註冊帳戶。
+
+一旦你有了帳戶，就可以在帳戶設定頁面找到你的 API 權杖。
+
+如果你想在開發中使用 OpenAI API，你可以在 API 文檔頁面中找到更多信息和說明。
+
+請注意，OpenAI API 只面向滿足某些條件的用戶開放。你可以在 API 文檔頁面中找到有關 API 的使用條件和限制的更多信息。
+
+### 部署在 Heroku 上
+
+在 <https://www.herokucdn.com/deploy/button.svg> 上點擊「部署」按鈕。
+
+輸入「Channel Secret」、「Channel Access Token」和「ChatGPT Access Token」。
+
+記住你的 Heroku 伺服器 ID。
+
+在 LINE Bot 儀表板中設置基本 API：
+
+設置你的基本帳戶信息，包括「回調 URL」在 <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>。
+
+這就是它！你完成了。
 
 License
 ---------------
