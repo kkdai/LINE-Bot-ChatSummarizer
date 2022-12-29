@@ -106,8 +106,10 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					for _, m := range q {
 						oriContext = oriContext + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
+					oriContext = fmt.Sprintf("幫我總結 `%s`", oriContext)
+					reply = CompleteContext(oriContext)
 
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("ori"+reply), linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
 					}
 				}
