@@ -50,11 +50,11 @@ English version, please check [ENGLISH Version](README_en.md)
 
 在 <https://openai.com/api/> 註冊帳戶。
 
-一旦你有了帳戶，就可以在帳戶設定頁面找到你的 API 權杖。
+一旦你有了帳戶，就可以在帳戶設定頁面找到你的 API Access Token。
 
 如果你想在開發中使用 OpenAI API，你可以在 API 文檔頁面中找到更多信息和說明。
 
-請注意，OpenAI API 只面向滿足某些條件的用戶開放。你可以在 API 文檔頁面中找到有關 API 的使用條件和限制的更多信息。
+請注意，OpenAI API 只面向滿足某些條件的用戶開放。你可以在 API 文件頁面中找到有關 API 的使用條件和限制的更多信息。
 
 ### 部署在 Heroku 上
 
@@ -68,7 +68,7 @@ English version, please check [ENGLISH Version](README_en.md)
 
 在 LINE Bot 儀表板中設置基本 API：
 
-設置你的基本帳戶信息，包括「回調 URL」在 <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>。
+設置你的基本帳戶信息，包括「Webhook URL」在 <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>。
 
 這就是它！你完成了。
 
