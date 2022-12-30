@@ -68,7 +68,7 @@ English version, please check [ENGLISH Version](README_en.md)
 
 在 LINE Bot 儀表板中設置基本 API：
 
-設置你的基本帳戶信息，包括「回調 URL」在 <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>。
+設置你的基本帳戶信息，包括「Webhook URL」在 <https://{YOUR_HEROKU_SERVER_ID}.herokuapp.com/callback>。
 
 這就是它！你完成了。
 
