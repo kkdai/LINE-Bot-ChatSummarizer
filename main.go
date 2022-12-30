@@ -63,16 +63,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			// Handle only on text message
 			case *linebot.TextMessage:
+				// 預設訊息
 				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
 
-				// If chatbot in a group, start to save string
+				// 如果聊天機器人在群組中，開始儲存訊息。
 				if event.Source.GroupID != "" {
+
+					// 先取得使用者 Display Name (也就是顯示的名稱)
 					userName := event.Source.UserID
 					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
 					if err == nil {
 						userName = userProfile.DisplayName
 					}
 
+					// event.Source.GroupID 就是聊天群組的 ID，並且透過聊天群組的 ID 來放入 Map 之中。
 					q := summaryQueue[event.Source.GroupID]
 					m := MsgDetail{
 						MsgText:  message.Text,
@@ -101,23 +105,31 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print(err)
 					}
 				} else if strings.EqualFold(message.Text, ":sum_all") {
+					// 把聊天群組裡面的訊息都捲出來（依照先後順序）
 					oriContext := ""
 					q := summaryQueue[event.Source.GroupID]
 					for _, m := range q {
+						// [xxx]: 他講了什麼... 時間
 						oriContext = oriContext + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
-					oriContext = fmt.Sprintf("幫我總結 `%s`", oriContext)
-					reply = CompleteContext(oriContext)
 
+					// 取得使用者暱稱
 					userName := event.Source.UserID
 					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
 					if err == nil {
 						userName = userProfile.DisplayName
 					}
+
+					// 訊息內先回，再來總結。
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("好的，總結文字已經發給您了"+userName)).Do(); err != nil {
 						log.Print(err)
 					}
 
+					// 就是請 ChatGPT 幫你總結
+					oriContext = fmt.Sprintf("幫我總結 `%s`", oriContext)
+					reply = CompleteContext(oriContext)
+
+					// 因為 ChatGPT 可能會很慢，所以這邊後來用 SendMsg 來發送私訊給使用者。
 					if _, err = bot.PushMessage(event.Source.UserID, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
 					}
