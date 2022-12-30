@@ -63,16 +63,20 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			// Handle only on text message
 			case *linebot.TextMessage:
+				// 預設訊息
 				reply := "msg ID:" + message.ID + ":" + "Get:" + message.Text + " , \n OK!"
 
-				// If chatbot in a group, start to save string
+				// 如果聊天機器人在群組中，開始儲存訊息。
 				if event.Source.GroupID != "" {
+
+					// 先取得使用者 Display Name (也就是顯示的名稱)
 					userName := event.Source.UserID
 					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
 					if err == nil {
 						userName = userProfile.DisplayName
 					}
 
+					// event.Source.GroupID 就是聊天群組的 ID，並且透過聊天群組的 ID 來放入 Map 之中。
 					q := summaryQueue[event.Source.GroupID]
 					m := MsgDetail{
 						MsgText:  message.Text,
@@ -129,7 +133,6 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					if _, err = bot.PushMessage(event.Source.UserID, linebot.NewTextMessage(reply)).Do(); err != nil {
 						log.Print(err)
 					}
-
 				}
 
 			// Handle only on Sticker message
