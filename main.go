@@ -79,17 +79,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 
 					// event.Source.GroupID 就是聊天群組的 ID，並且透過聊天群組的 ID 來放入 Map 之中。
-					// q, _ := summaryQueue.ReadGroupInfo(event.Source.GroupID)
 					m := MsgDetail{
 						MsgText:  message.Text,
 						UserName: userName,
 						Time:     time.Now(),
 					}
 					summaryQueue.AppendGroupInfo(event.Source.GroupID, m)
-
-					// log.Println("Save msg:", m)
-					// summaryQueue[event.Source.GroupID] = append(q, m)
-					// log.Println("All msg:", q)
 				}
 
 				// Directly to ChatGPT
@@ -146,9 +141,27 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					kw = kw + "," + k
 				}
 
-				outStickerResult := fmt.Sprintf("收到貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
-				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
-					log.Print(err)
+				if event.Source.GroupID != "" {
+					// 在群組中，一樣紀錄起來不回覆。
+					outStickerResult := fmt.Sprintf("貼圖訊息: %s ", kw)
+					userName := event.Source.UserID
+					userProfile, err := bot.GetProfile(event.Source.UserID).Do()
+					if err == nil {
+						userName = userProfile.DisplayName
+					}
+					m := MsgDetail{
+						MsgText:  outStickerResult,
+						UserName: userName,
+						Time:     time.Now(),
+					}
+					summaryQueue.AppendGroupInfo(event.Source.GroupID, m)
+				} else {
+					outStickerResult := fmt.Sprintf("貼圖訊息: %s, pkg: %s kw: %s  text: %s", message.StickerID, message.PackageID, kw, message.Text)
+
+					// 1 on 1 就回覆
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(outStickerResult)).Do(); err != nil {
+						log.Print(err)
+					}
 				}
 			}
 		}
