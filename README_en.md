@@ -56,15 +56,25 @@ If you want to use the OpenAI API for development, you can find more information
 
 Please note that the OpenAI API is only available to users who meet certain criteria. You can find more information about the usage conditions and limitations of the API in the API documentation page.
 
-### To deploy this on Heroku
+### Deploy this on Web Platform
 
-Click the "Deploy" button.
+You can choose [Heroku](https://www.heroku.com/) or [Render](http://render.com/)
+
+#### Deploy this on Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-Input the "Channel Secret", "Channel Access Token", and "ChatGPT Access Token".
+- Input `Channel Secret` and `Channel Access Token` and `ChatGptToken`.
 
-Remember your Heroku server ID.
+#### Deploy this on Rener
+
+[![Deploy to Render](http://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+- Input `Channel Secret` and `Channel Access Token` and `ChatGptToken`.
+
+### Update LINE Bot
+
+Remember your Web Platform server ID.
 
 To set up the basic API in the LINE Bot Dashboard:
 

@@ -46,7 +46,7 @@ English version, please check [ENGLISH Version](README_en.md)
 
 從「基本設定」選項卡中打開 LINE OA 管理器，然後轉到 OA 管理器的回復設定。在那裡啟用「webhook」。
 
-### 獲取 OpenAI API 權杖
+### 獲取 OpenAI API Token
 
 在 <https://openai.com/api/> 註冊帳戶。
 
@@ -56,15 +56,25 @@ English version, please check [ENGLISH Version](README_en.md)
 
 請注意，OpenAI API 只面向滿足某些條件的用戶開放。你可以在 API 文件頁面中找到有關 API 的使用條件和限制的更多信息。
 
-### 部署在 Heroku 上
+### 部署在不同的 Web Platform
 
-在下方上點擊「Deploy」按鈕。
+你可以選擇部署在 [Heroku](https://www.heroku.com/) 或是 [Render](http://render.com/)
+
+#### 部署在 Heroku
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-輸入「Channel Secret」、「Channel Access Token」和「ChatGPT Access Token」。
+- 輸入 `Channel Secret` and `Channel Access Token` 還有 `ChatGptToken` .
 
-記住你的 Heroku 伺服器 ID。
+#### 部署在 Rener
+
+[![Deploy to Render](http://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+- 輸入 `Channel Secret` and `Channel Access Token` 還有 `ChatGptToken` .
+
+### 接下來
+
+記住你的 Web Platform  伺服器 ID。
 
 在 LINE Bot 儀表板中設置基本 API：
 
