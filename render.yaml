@@ -1,0 +1,15 @@
+services:
+- type: web
+  name: LINE-Bot-ChatSummarizer
+  env: go
+  buildCommand: go build -o app
+  startCommand: ./app
+  plan: free
+  autoDeploy: false
+  envVars:
+  - key: ChannelAccessToken
+    sync: false
+  - key: ChannelSecret
+    sync: false
+  - key: ChatGptToken
+    sync: false
