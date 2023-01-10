@@ -26,11 +26,13 @@ import (
 
 var bot *linebot.Client
 var client *gpt3.Client
-var summaryQueue GroupStorage
+var summaryQueue GroupDB
 
 func main() {
 	var err error
-	summaryQueue = make(GroupStorage)
+	// 預設使用 Memory DB (for now)
+	summaryQueue = NewMemDB()
+
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 
@@ -77,15 +79,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					}
 
 					// event.Source.GroupID 就是聊天群組的 ID，並且透過聊天群組的 ID 來放入 Map 之中。
-					q := summaryQueue[event.Source.GroupID]
+					// q, _ := summaryQueue.ReadGroupInfo(event.Source.GroupID)
 					m := MsgDetail{
 						MsgText:  message.Text,
 						UserName: userName,
 						Time:     time.Now(),
 					}
-					log.Println("Save msg:", m)
-					summaryQueue[event.Source.GroupID] = append(q, m)
-					log.Println("All msg:", q)
+					summaryQueue.AppendGroupInfo(event.Source.GroupID, m)
+
+					// log.Println("Save msg:", m)
+					// summaryQueue[event.Source.GroupID] = append(q, m)
+					// log.Println("All msg:", q)
 				}
 
 				// Directly to ChatGPT
@@ -96,7 +100,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						log.Print(err)
 					}
 				} else if strings.EqualFold(message.Text, ":list_all") {
-					q := summaryQueue[event.Source.GroupID]
+					q := summaryQueue.ReadGroupInfo(event.Source.GroupID)
 					for _, m := range q {
 						reply = reply + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
 					}
@@ -107,7 +111,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				} else if strings.EqualFold(message.Text, ":sum_all") {
 					// 把聊天群組裡面的訊息都捲出來（依照先後順序）
 					oriContext := ""
-					q := summaryQueue[event.Source.GroupID]
+					q := summaryQueue.ReadGroupInfo(event.Source.GroupID)
 					for _, m := range q {
 						// [xxx]: 他講了什麼... 時間
 						oriContext = oriContext + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))

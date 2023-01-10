@@ -2,6 +2,10 @@ package main
 
 import "time"
 
+type GroupDB interface {
+	ReadGroupInfo(string) GroupData
+	AppendGroupInfo(string, MsgDetail)
+}
 type MsgDetail struct {
 	MsgText  string
 	UserName string
@@ -9,5 +13,3 @@ type MsgDetail struct {
 }
 
 type GroupData []MsgDetail
-
-type GroupStorage map[string]GroupData
