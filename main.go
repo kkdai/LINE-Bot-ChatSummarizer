@@ -30,8 +30,14 @@ var summaryQueue GroupDB
 
 func main() {
 	var err error
-	// 預設使用 Memory DB (for now)
-	summaryQueue = NewMemDB()
+
+	//  如果有預設 DABTASE_URL 就建立 PostGresSQL; 反之則建立 Mem DB
+	pSQL := os.Getenv("DATABASE_URL")
+	if pSQL != "" {
+		summaryQueue = NewPQSql(pSQL)
+	} else {
+		summaryQueue = NewMemDB()
+	}
 
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
