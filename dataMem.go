@@ -1,9 +1,9 @@
 package main
 
-type GroupStorage map[string]GroupData
+type MemStorage map[string]GroupData
 
 type MemDB struct {
-	db GroupStorage
+	db MemStorage
 }
 
 func (mdb *MemDB) ReadGroupInfo(roomID string) GroupData {
@@ -16,6 +16,6 @@ func (mdb *MemDB) AppendGroupInfo(roomID string, m MsgDetail) {
 
 func NewMemDB() *MemDB {
 	return &MemDB{
-		db: make(GroupStorage),
+		db: make(MemStorage),
 	}
 }

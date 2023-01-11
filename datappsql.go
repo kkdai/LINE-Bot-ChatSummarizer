@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/go-pg/pg/v10"
 	"github.com/go-pg/pg/v10/orm"
 )
@@ -33,7 +35,7 @@ func NewPQSql(url string) *PSqlDB {
 
 func createSchema(db *pg.DB) error {
 	models := []interface{}{
-		(*GroupStorage)(nil),
+		(*MemStorage)(nil),
 	}
 
 	for _, model := range models {
@@ -45,3 +47,42 @@ func createSchema(db *pg.DB) error {
 	}
 	return nil
 }
+
+type DBStorage struct {
+	ID      string
+	Dataset GroupData
+}
+
+func (u *DBStorage) Add(conn *PSqlDB) {
+	_, err := conn.Db.Model(u).Insert()
+	if err != nil {
+		log.Println(err)
+	}
+}
+
+func (u *DBStorage) Get(conn *PSqlDB) (result *DBStorage, err error) {
+	log.Println("***Get dataset uUID=", u.ID)
+	data := DBStorage{}
+	err = conn.Db.Model(&data).
+		Where("ID = ?", u.ID).
+		Select()
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	log.Println("DB result= ", data)
+	return &data, nil
+}
+
+// func (u *UserFavorite) Update(meta *models.Model) (err error) {
+// 	log.Println("***Update Fav User=", u)
+
+// 	_, err = meta.Db.Model(u).
+// 		Set("favorites = ?", u.Favorites).
+// 		Where("user_id = ?", u.UserId).
+// 		Update()
+// 	if err != nil {
+// 		meta.Log.Println(err)
+// 	}
+// 	return nil
+// }
