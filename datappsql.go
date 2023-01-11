@@ -48,9 +48,11 @@ func createSchema(db *pg.DB) error {
 	return nil
 }
 
+// DBStorage: for orm db storage.
 type DBStorage struct {
-	ID      string
-	Dataset GroupData
+	Id      int64     `bson:"_id"`
+	RoomID  string    `json:"roomid" bson:"roomid"`
+	Dataset GroupData `json:"dataset" bson:"dataset"`
 }
 
 func (u *DBStorage) Add(conn *PSqlDB) {
@@ -61,10 +63,10 @@ func (u *DBStorage) Add(conn *PSqlDB) {
 }
 
 func (u *DBStorage) Get(conn *PSqlDB) (result *DBStorage, err error) {
-	log.Println("***Get dataset uUID=", u.ID)
+	log.Println("***Get dataset roomID=", u.RoomID)
 	data := DBStorage{}
 	err = conn.Db.Model(&data).
-		Where("ID = ?", u.ID).
+		Where("Room ID = ?", u.RoomID).
 		Select()
 	if err != nil {
 		log.Println(err)
@@ -74,15 +76,15 @@ func (u *DBStorage) Get(conn *PSqlDB) (result *DBStorage, err error) {
 	return &data, nil
 }
 
-// func (u *UserFavorite) Update(meta *models.Model) (err error) {
-// 	log.Println("***Update Fav User=", u)
+func (u *DBStorage) Update(conn *PSqlDB) (err error) {
+	log.Println("***Update DB group data=", u)
 
-// 	_, err = meta.Db.Model(u).
-// 		Set("favorites = ?", u.Favorites).
-// 		Where("user_id = ?", u.UserId).
-// 		Update()
-// 	if err != nil {
-// 		meta.Log.Println(err)
-// 	}
-// 	return nil
-// }
+	_, err = conn.Db.Model(u).
+		Set("dataset = ?", u.Dataset).
+		Where("roomid = ?", u.RoomID).
+		Update()
+	if err != nil {
+		log.Println(err)
+	}
+	return nil
+}
