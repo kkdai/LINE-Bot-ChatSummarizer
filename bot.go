@@ -64,7 +64,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSumAll(event *linebot.Event, message string) {
-	reply := ""
+	reply := "handleSumAll"
 	// 把聊天群組裡面的訊息都捲出來（依照先後順序）
 	oriContext := ""
 	q := summaryQueue.ReadGroupInfo(getGroupID(event))
@@ -96,7 +96,7 @@ func handleSumAll(event *linebot.Event, message string) {
 }
 
 func handleListAll(event *linebot.Event, message string) {
-	reply := ""
+	reply := "handleListAll"
 	q := summaryQueue.ReadGroupInfo(getGroupID(event))
 	for _, m := range q {
 		reply = reply + fmt.Sprintf("[%s]: %s . %s\n", m.UserName, m.MsgText, m.Time.Local().UTC().Format("2006-01-02 15:04:05"))
