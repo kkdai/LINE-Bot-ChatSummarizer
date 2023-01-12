@@ -27,18 +27,16 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			switch message := event.Message.(type) {
 			// Handle only on text message
 			case *linebot.TextMessage:
-				// 如果聊天機器人在群組中，開始儲存訊息。
-				if isGroupEvent(event) {
-					handleStoreMsg(event, message.Text)
-				}
-
 				// Directly to ChatGPT
 				if strings.Contains(message.Text, ":gpt") {
 					handleGPT(event, message.Text)
-				} else if strings.EqualFold(message.Text, ":list_all") {
+				} else if strings.EqualFold(message.Text, ":list_all") || isGroupEvent(event) {
 					handleListAll(event, message.Text)
-				} else if strings.EqualFold(message.Text, ":sum_all") {
+				} else if strings.EqualFold(message.Text, ":sum_all") || isGroupEvent(event) {
 					handleSumAll(event, message.Text)
+				} else if isGroupEvent(event) {
+					// 如果聊天機器人在群組中，開始儲存訊息。
+					handleStoreMsg(event, message.Text)
 				}
 
 			// Handle only on Sticker message
