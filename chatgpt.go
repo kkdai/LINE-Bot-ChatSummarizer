@@ -7,7 +7,7 @@ import (
 	gpt3 "github.com/sashabaranov/go-gpt3"
 )
 
-func CompleteContext(ori string) (ret string) {
+func gptCompleteContext(ori string) (ret string) {
 	// 取得 context
 	ctx := context.Background()
 
