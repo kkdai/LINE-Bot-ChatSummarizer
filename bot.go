@@ -30,9 +30,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				// Directly to ChatGPT
 				if strings.Contains(message.Text, ":gpt") {
 					handleGPT(event, message.Text)
-				} else if strings.EqualFold(message.Text, ":list_all") || isGroupEvent(event) {
+				} else if strings.EqualFold(message.Text, ":list_all") && isGroupEvent(event) {
 					handleListAll(event, message.Text)
-				} else if strings.EqualFold(message.Text, ":sum_all") || isGroupEvent(event) {
+				} else if strings.EqualFold(message.Text, ":sum_all") && isGroupEvent(event) {
 					handleSumAll(event, message.Text)
 				} else if isGroupEvent(event) {
 					// 如果聊天機器人在群組中，開始儲存訊息。
