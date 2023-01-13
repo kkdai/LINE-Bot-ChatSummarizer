@@ -12,14 +12,30 @@ type PSqlDB struct {
 }
 
 func (mdb *PSqlDB) ReadGroupInfo(roomID string) GroupData {
+	pgsql := &DBStorage{
+		RoomID: roomID,
+	}
+	if ret, err := pgsql.Get(mdb); err == nil {
+		return ret.Dataset
+	} else {
+		log.Println("DB read err:", err)
+	}
+
 	return GroupData{}
 }
 
 func (mdb *PSqlDB) AppendGroupInfo(roomID string, m MsgDetail) {
-	// mdb.db[roomID] = append(mdb.db[roomID], m)
+	u := mdb.ReadGroupInfo(roomID)
+	u = append(u, m)
+	pgsql := &DBStorage{
+		RoomID: roomID,
+	}
+	if err := pgsql.Update(mdb); err != nil {
+		log.Println("DB update err:", err)
+	}
 }
 
-func NewPQSql(url string) *PSqlDB {
+func NewPGSql(url string) *PSqlDB {
 	options, _ := pg.ParseURL(url)
 	db := pg.Connect(options)
 
