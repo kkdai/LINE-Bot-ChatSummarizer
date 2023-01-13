@@ -7,11 +7,11 @@ import (
 	"github.com/go-pg/pg/v10/orm"
 )
 
-type PSqlDB struct {
+type PGSqlDB struct {
 	Db *pg.DB
 }
 
-func (mdb *PSqlDB) ReadGroupInfo(roomID string) GroupData {
+func (mdb *PGSqlDB) ReadGroupInfo(roomID string) GroupData {
 	pgsql := &DBStorage{
 		RoomID: roomID,
 	}
@@ -24,7 +24,7 @@ func (mdb *PSqlDB) ReadGroupInfo(roomID string) GroupData {
 	return GroupData{}
 }
 
-func (mdb *PSqlDB) AppendGroupInfo(roomID string, m MsgDetail) {
+func (mdb *PGSqlDB) AppendGroupInfo(roomID string, m MsgDetail) {
 	u := mdb.ReadGroupInfo(roomID)
 	u = append(u, m)
 	pgsql := &DBStorage{
@@ -35,7 +35,7 @@ func (mdb *PSqlDB) AppendGroupInfo(roomID string, m MsgDetail) {
 	}
 }
 
-func NewPGSql(url string) *PSqlDB {
+func NewPGSql(url string) *PGSqlDB {
 	options, _ := pg.ParseURL(url)
 	db := pg.Connect(options)
 
@@ -44,7 +44,7 @@ func NewPGSql(url string) *PSqlDB {
 		panic(err)
 	}
 
-	return &PSqlDB{
+	return &PGSqlDB{
 		Db: db,
 	}
 }
@@ -71,14 +71,14 @@ type DBStorage struct {
 	Dataset GroupData `json:"dataset" bson:"dataset"`
 }
 
-func (u *DBStorage) Add(conn *PSqlDB) {
+func (u *DBStorage) Add(conn *PGSqlDB) {
 	_, err := conn.Db.Model(u).Insert()
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func (u *DBStorage) Get(conn *PSqlDB) (result *DBStorage, err error) {
+func (u *DBStorage) Get(conn *PGSqlDB) (result *DBStorage, err error) {
 	log.Println("***Get dataset roomID=", u.RoomID)
 	data := DBStorage{}
 	err = conn.Db.Model(&data).
@@ -92,7 +92,7 @@ func (u *DBStorage) Get(conn *PSqlDB) (result *DBStorage, err error) {
 	return &data, nil
 }
 
-func (u *DBStorage) Update(conn *PSqlDB) (err error) {
+func (u *DBStorage) Update(conn *PGSqlDB) (err error) {
 	log.Println("***Update DB group data=", u)
 
 	_, err = conn.Db.Model(u).
