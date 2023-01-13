@@ -32,7 +32,7 @@ func main() {
 	//  如果有預設 DABTASE_URL 就建立 PostGresSQL; 反之則建立 Mem DB
 	pSQL := os.Getenv("DATABASE_URL")
 	if pSQL != "" {
-		summaryQueue = NewPQSql(pSQL)
+		summaryQueue = NewPGSql(pSQL)
 	} else {
 		summaryQueue = NewMemDB()
 	}
