@@ -13,3 +13,5 @@ services:
     sync: false
   - key: ChatGptToken
     sync: false
+  - key: DATABASE_URL
+    sync: false    

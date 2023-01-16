@@ -72,6 +72,13 @@ You can choose [Heroku](https://www.heroku.com/) or [Render](http://render.com/)
 
 - Input `Channel Secret` and `Channel Access Token` and `ChatGptToken`.
 
+### Deploy to different DB
+
+### PostGresSQL
+
+Add `DATABASE_URL` setting with database connection parameters.
+Left empty if you want use memory as your database.
+
 ### Update LINE Bot
 
 Remember your Web Platform server ID.
