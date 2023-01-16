@@ -27,6 +27,10 @@
     "ChannelSecret": {
       "description": "Channel Secret",
       "required": true
+    },
+    "DATABASE_URL": {
+      "description": "PostGresSQL DB url, leave empty if you want to use memory DB.",
+      "required": false
     }
   }
 }
