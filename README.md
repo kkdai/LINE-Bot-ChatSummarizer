@@ -72,6 +72,13 @@ English version, please check [ENGLISH Version](README_en.md)
 
 - 輸入 `Channel Secret` and `Channel Access Token` 還有 `ChatGptToken` .
 
+### 部署不同資料庫
+
+### PostGresSQL
+
+請記得在參數裡面加上 `DATABASE_URL` DB 的連接網址。
+如果留空的話，將會使用記憶體當資料庫。
+
 ### 接下來
 
 記住你的 Web Platform  伺服器 ID。
