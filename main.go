@@ -26,10 +26,14 @@ var bot *linebot.Client
 var client *gpt3.Client
 var summaryQueue GroupDB
 var stickerRedeemable bool
+var enableRedeem string
 
 func main() {
 	stickerRedeemable = false
 	var err error
+
+	// Enable new feature (YES, default no)
+	enableRedeem = os.Getenv("REDEEM_ENABLE")
 
 	//  如果有預設 DABTASE_URL 就建立 PostGresSQL; 反之則建立 Mem DB
 	pSQL := os.Getenv("DATABASE_URL")

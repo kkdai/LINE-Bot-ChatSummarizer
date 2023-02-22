@@ -29,10 +29,17 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				// Directly to ChatGPT
 				if strings.Contains(message.Text, ":gpt") {
-					if stickerRedeemable {
-						handleGPT(event, message.Text)
+					// New feature.
+					if enableRedeem == "YES" {
+						if stickerRedeemable {
+							handleGPT(event, message.Text)
+							stickerRedeemable = false
+						} else {
+							handleRedeemRequestMsg(event)
+						}
 					} else {
-
+						// Original one
+						handleGPT(event, message.Text)
 					}
 				} else if strings.EqualFold(message.Text, ":list_all") && isGroupEvent(event) {
 					handleListAll(event, message.Text)
@@ -51,6 +58,13 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				log.Println("Sticker: PID=", message.PackageID, " SID=", message.StickerID)
+				if message.PackageID == "27641" && message.StickerID == "549404208" {
+					stickerRedeemable = true
+					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("你的賦能功能啟動了！")).Do(); err != nil {
+						log.Print(err)
+					}
+				}
+
 				if isGroupEvent(event) {
 					// 在群組中，一樣紀錄起來不回覆。
 					outStickerResult := fmt.Sprintf("貼圖訊息: %s ", kw)
@@ -119,7 +133,7 @@ func handleGPT(event *linebot.Event, message string) {
 	}
 }
 
-func handleRedeemRequestMsg(event *linebot.Event, message string) {
+func handleRedeemRequestMsg(event *linebot.Event) {
 	// 先取得使用者 Display Name (也就是顯示的名稱)
 	userName := event.Source.UserID
 	userProfile, err := bot.GetProfile(event.Source.UserID).Do()
@@ -127,7 +141,7 @@ func handleRedeemRequestMsg(event *linebot.Event, message string) {
 		userName = userProfile.DisplayName
 	}
 
-	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(userName+":你需要買貼圖，開啟這個功能"), linebot.NewStickerMessage("789", "10856")).Do(); err != nil {
+	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(userName+":你需要買貼圖，開啟這個功能"), linebot.NewStickerMessage("27641", "549404208")).Do(); err != nil {
 		log.Print(err)
 	}
 }
