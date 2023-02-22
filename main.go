@@ -28,6 +28,9 @@ var summaryQueue GroupDB
 var stickerRedeemable bool
 var enableRedeem string
 
+const RedeemStickerPID = "789"
+const RedeemStickerSID = "10856"
+
 func main() {
 	stickerRedeemable = false
 	var err error

@@ -58,7 +58,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				log.Println("Sticker: PID=", message.PackageID, " SID=", message.StickerID)
-				if message.PackageID == "27641" && message.StickerID == "549404208" {
+				if message.PackageID == RedeemStickerPID && message.StickerID == RedeemStickerSID {
 					stickerRedeemable = true
 					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("你的賦能功能啟動了！")).Do(); err != nil {
 						log.Print(err)
@@ -141,7 +141,7 @@ func handleRedeemRequestMsg(event *linebot.Event) {
 		userName = userProfile.DisplayName
 	}
 
-	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(userName+":你需要買貼圖，開啟這個功能"), linebot.NewStickerMessage("27641", "549404208")).Do(); err != nil {
+	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(userName+":你需要買貼圖，開啟這個功能"), linebot.NewStickerMessage(RedeemStickerPID, RedeemStickerSID)).Do(); err != nil {
 		log.Print(err)
 	}
 }
