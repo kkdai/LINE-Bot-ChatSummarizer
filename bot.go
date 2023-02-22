@@ -29,7 +29,11 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 			case *linebot.TextMessage:
 				// Directly to ChatGPT
 				if strings.Contains(message.Text, ":gpt") {
-					handleGPT(event, message.Text)
+					if stickerRedeemable {
+						handleGPT(event, message.Text)
+					} else {
+
+					}
 				} else if strings.EqualFold(message.Text, ":list_all") && isGroupEvent(event) {
 					handleListAll(event, message.Text)
 				} else if strings.EqualFold(message.Text, ":sum_all") && isGroupEvent(event) {
@@ -46,6 +50,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					kw = kw + "," + k
 				}
 
+				log.Println("Sticker: PID=", message.PackageID, " SID=", message.StickerID)
 				if isGroupEvent(event) {
 					// 在群組中，一樣紀錄起來不回覆。
 					outStickerResult := fmt.Sprintf("貼圖訊息: %s ", kw)
@@ -110,6 +115,19 @@ func handleGPT(event *linebot.Event, message string) {
 	reply := gptCompleteContext(message)
 
 	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+		log.Print(err)
+	}
+}
+
+func handleRedeemRequestMsg(event *linebot.Event, message string) {
+	// 先取得使用者 Display Name (也就是顯示的名稱)
+	userName := event.Source.UserID
+	userProfile, err := bot.GetProfile(event.Source.UserID).Do()
+	if err == nil {
+		userName = userProfile.DisplayName
+	}
+
+	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(userName+":你需要買貼圖，開啟這個功能"), linebot.NewStickerMessage("789", "10856")).Do(); err != nil {
 		log.Print(err)
 	}
 }

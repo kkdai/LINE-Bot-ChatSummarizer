@@ -25,8 +25,10 @@ import (
 var bot *linebot.Client
 var client *gpt3.Client
 var summaryQueue GroupDB
+var stickerRedeemable bool
 
 func main() {
+	stickerRedeemable = false
 	var err error
 
 	//  如果有預設 DABTASE_URL 就建立 PostGresSQL; 反之則建立 Mem DB
