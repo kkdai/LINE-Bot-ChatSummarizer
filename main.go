@@ -60,3 +60,7 @@ func main() {
 	addr := fmt.Sprintf(":%s", port)
 	http.ListenAndServe(addr, nil)
 }
+
+func IsRedemptionEnabled() bool {
+	return enableRedeem == "YES"
+}

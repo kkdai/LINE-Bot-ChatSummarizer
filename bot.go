@@ -30,7 +30,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				// Directly to ChatGPT
 				if strings.Contains(message.Text, ":gpt") {
 					// New feature.
-					if enableRedeem == "YES" {
+					if IsRedemptionEnabled() {
 						if stickerRedeemable {
 							handleGPT(event, message.Text)
 							stickerRedeemable = false
@@ -58,10 +58,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				}
 
 				log.Println("Sticker: PID=", message.PackageID, " SID=", message.StickerID)
-				if message.PackageID == RedeemStickerPID && message.StickerID == RedeemStickerSID {
-					stickerRedeemable = true
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("你的賦能功能啟動了！")).Do(); err != nil {
-						log.Print(err)
+				if IsRedemptionEnabled() {
+					if message.PackageID == RedeemStickerPID && message.StickerID == RedeemStickerSID {
+						stickerRedeemable = true
+						if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("你的賦能功能啟動了！")).Do(); err != nil {
+							log.Print(err)
+						}
 					}
 				}
 
