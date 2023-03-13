@@ -1,4 +1,4 @@
-package gogpt
+package openai
 
 import (
 	"bytes"
@@ -103,7 +103,7 @@ var stringToEnum = map[string]EmbeddingModel{
 // then their vector representations should also be similar.
 type Embedding struct {
 	Object    string    `json:"object"`
-	Embedding []float64 `json:"embedding"`
+	Embedding []float32 `json:"embedding"`
 	Index     int       `json:"index"`
 }
 
@@ -141,12 +141,11 @@ func (c *Client) CreateEmbeddings(ctx context.Context, request EmbeddingRequest)
 	}
 
 	urlSuffix := "/embeddings"
-	req, err := http.NewRequest(http.MethodPost, c.fullURL(urlSuffix), bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.fullURL(urlSuffix), bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return
 	}
 
-	req = req.WithContext(ctx)
 	err = c.sendRequest(req, &resp)
 
 	return

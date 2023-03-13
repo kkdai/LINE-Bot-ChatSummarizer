@@ -64,7 +64,7 @@ func createSchema(db *pg.DB) error {
 	return nil
 }
 
-// DBStorage: for orm db storage.
+// DBStorage for orm db storage.
 type DBStorage struct {
 	Id      int64     `bson:"_id"`
 	RoomID  string    `json:"roomid" bson:"roomid"`
