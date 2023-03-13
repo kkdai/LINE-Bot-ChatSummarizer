@@ -19,7 +19,7 @@ import (
 	"os"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	gpt3 "github.com/sashabaranov/go-gpt3"
+	gpt3 "github.com/sashabaranov/go-openai"
 )
 
 var bot *linebot.Client
