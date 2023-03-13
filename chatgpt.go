@@ -4,17 +4,17 @@ import (
 	"context"
 	"fmt"
 
-	gpt3 "github.com/sashabaranov/go-gpt3"
+	gpt3 "github.com/sashabaranov/go-openai"
 )
 
 func gptCompleteContext(ori string) (ret string) {
-	// 取得 context
+	// Get the context.
 	ctx := context.Background()
 
 	// 主要 API Open AI Completion https://beta.openai.com/docs/guides/completion
 	req := gpt3.CompletionRequest{
-		// Model: Davinci003 成果最好，但是也最慢。
-		Model: gpt3.GPT3TextDavinci003,
+		// Model: The GPT-3.5 turbo model is the most powerful model available.
+		Model: gpt3.GPT3Dot5Turbo,
 		// 最大輸出內容，可以調整一下。
 		MaxTokens: 300,
 		// 輸入文字，也就是你平時在 ChatGPT 詢問他的問題。
