@@ -1,10 +1,15 @@
-package gogpt
+package openai
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
+)
+
+var (
+	ErrCompletionUnsupportedModel = errors.New("this model is not supported with this method, please use CreateChatCompletion client method instead") //nolint:lll
 )
 
 // GPT3 Defines the models provided by OpenAI to use when generating
@@ -12,6 +17,8 @@ import (
 // GPT3 Models are designed for text-based tasks. For code-specific
 // tasks, please refer to the Codex series of models.
 const (
+	GPT3Dot5Turbo0301       = "gpt-3.5-turbo-0301"
+	GPT3Dot5Turbo           = "gpt-3.5-turbo"
 	GPT3TextDavinci003      = "text-davinci-003"
 	GPT3TextDavinci002      = "text-davinci-002"
 	GPT3TextCurie001        = "text-curie-001"
@@ -75,7 +82,7 @@ type LogprobResult struct {
 type CompletionResponse struct {
 	ID      string             `json:"id"`
 	Object  string             `json:"object"`
-	Created uint64             `json:"created"`
+	Created int64              `json:"created"`
 	Model   string             `json:"model"`
 	Choices []CompletionChoice `json:"choices"`
 	Usage   Usage              `json:"usage"`
@@ -90,6 +97,11 @@ func (c *Client) CreateCompletion(
 	ctx context.Context,
 	request CompletionRequest,
 ) (response CompletionResponse, err error) {
+	if request.Model == GPT3Dot5Turbo0301 || request.Model == GPT3Dot5Turbo {
+		err = ErrCompletionUnsupportedModel
+		return
+	}
+
 	var reqBytes []byte
 	reqBytes, err = json.Marshal(request)
 	if err != nil {
@@ -97,12 +109,11 @@ func (c *Client) CreateCompletion(
 	}
 
 	urlSuffix := "/completions"
-	req, err := http.NewRequest("POST", c.fullURL(urlSuffix), bytes.NewBuffer(reqBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.fullURL(urlSuffix), bytes.NewBuffer(reqBytes))
 	if err != nil {
 		return
 	}
 
-	req = req.WithContext(ctx)
 	err = c.sendRequest(req, &response)
 	return
 }
