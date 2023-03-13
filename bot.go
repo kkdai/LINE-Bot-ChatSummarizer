@@ -15,9 +15,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		if err == linebot.ErrInvalidSignature {
-			w.WriteHeader(400)
+			w.WriteHeader(http.StatusBadRequest)
 		} else {
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 		return
 	}
@@ -42,9 +42,9 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						handleGPT(event, message.Text)
 					}
 				} else if strings.EqualFold(message.Text, ":list_all") && isGroupEvent(event) {
-					handleListAll(event, message.Text)
+					handleListAll(event)
 				} else if strings.EqualFold(message.Text, ":sum_all") && isGroupEvent(event) {
-					handleSumAll(event, message.Text)
+					handleSumAll(event)
 				} else if isGroupEvent(event) {
 					// 如果聊天機器人在群組中，開始儲存訊息。
 					handleStoreMsg(event, message.Text)
@@ -84,7 +84,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleSumAll(event *linebot.Event, message string) {
+func handleSumAll(event *linebot.Event) {
 	// 把聊天群組裡面的訊息都捲出來（依照先後順序）
 	oriContext := ""
 	q := summaryQueue.ReadGroupInfo(getGroupID(event))
@@ -115,7 +115,7 @@ func handleSumAll(event *linebot.Event, message string) {
 	}
 }
 
-func handleListAll(event *linebot.Event, message string) {
+func handleListAll(event *linebot.Event) {
 	reply := ""
 	q := summaryQueue.ReadGroupInfo(getGroupID(event))
 	for _, m := range q {
