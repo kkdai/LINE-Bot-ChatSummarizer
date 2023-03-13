@@ -3,9 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-	"strconv"
-
 	gpt3 "github.com/sashabaranov/go-openai"
 )
 
@@ -13,18 +10,10 @@ func gptCompleteContext(ori string) (ret string) {
 	// Get the context.
 	ctx := context.Background()
 
-	maxTokens, err := strconv.Atoi(os.Getenv("ChatGptMaxTokens"))
-	if err != nil {
-		// The default value of token is set to 4096.
-		maxTokens = 4096
-	}
-
 	// For more details about the API of Open AI Chat Completion: https://platform.openai.com/docs/guides/chat
 	req := gpt3.ChatCompletionRequest{
 		// Model: The GPT-3.5 turbo model is the most powerful model available.
 		Model: gpt3.GPT3Dot5Turbo,
-		// The MaxTokens parameter controls how many tokens to generate.
-		MaxTokens: maxTokens,
 		// The message to complete.
 		Messages: []gpt3.ChatCompletionMessage{{
 			Role:    gpt3.ChatMessageRoleUser,
