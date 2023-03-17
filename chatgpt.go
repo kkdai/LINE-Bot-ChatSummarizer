@@ -2,7 +2,10 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
+
+	"github.com/sashabaranov/go-openai"
 	gpt3 "github.com/sashabaranov/go-openai"
 )
 
@@ -33,4 +36,26 @@ func gptCompleteContext(ori string) (ret string) {
 	}
 
 	return ret
+}
+
+// Create image by DALL-E 2
+func gptImageCreate(prompt string) (string, error) {
+	ctx := context.Background()
+
+	// Sample image by link
+	reqUrl := openai.ImageRequest{
+		Prompt:         prompt,
+		Size:           openai.CreateImageSize256x256,
+		ResponseFormat: openai.CreateImageResponseFormatURL,
+		N:              1,
+	}
+
+	respUrl, err := client.CreateImage(ctx, reqUrl)
+	if err != nil {
+		fmt.Printf("Image creation error: %v\n", err)
+		return "", errors.New("Image creation error")
+	}
+	fmt.Println(respUrl.Data[0].URL)
+
+	return respUrl.Data[0].URL, nil
 }
