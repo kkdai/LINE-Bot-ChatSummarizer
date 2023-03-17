@@ -175,7 +175,7 @@ func handleRedeemRequestMsg(event *linebot.Event) {
 }
 
 func handleStoreMsg(event *linebot.Event, message string) {
-	// 先取得使用者 Display Name (也就是顯示的名稱)
+	// Get user display name. (It is nick name of the user define.)
 	userName := event.Source.UserID
 	userProfile, err := bot.GetProfile(event.Source.UserID).Do()
 	if err == nil {
