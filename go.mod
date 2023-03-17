@@ -7,7 +7,7 @@ require github.com/line/line-bot-sdk-go/v7 v7.19.0
 
 require (
 	github.com/go-pg/pg/v10 v10.11.0
-	github.com/sashabaranov/go-openai v1.5.0
+	github.com/sashabaranov/go-openai v1.5.2
 )
 
 require (
