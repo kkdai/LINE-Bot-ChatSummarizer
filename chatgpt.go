@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/sashabaranov/go-openai"
-	gpt3 "github.com/sashabaranov/go-openai"
 )
 
 func gptCompleteContext(ori string) (ret string) {
@@ -14,12 +13,12 @@ func gptCompleteContext(ori string) (ret string) {
 	ctx := context.Background()
 
 	// For more details about the API of Open AI Chat Completion: https://platform.openai.com/docs/guides/chat
-	req := gpt3.ChatCompletionRequest{
-		// Model: The GPT-3.5 turbo model is the most powerful model available.
-		Model: gpt3.GPT3Dot5Turbo,
+	req := openai.ChatCompletionRequest{
+		// Model: The GPT-4 model is the most powerful model available.
+		Model: openai.GPT4,
 		// The message to complete.
-		Messages: []gpt3.ChatCompletionMessage{{
-			Role:    gpt3.ChatMessageRoleUser,
+		Messages: []openai.ChatCompletionMessage{{
+			Role:    openai.ChatMessageRoleUser,
 			Content: ori,
 		}},
 	}
