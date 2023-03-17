@@ -32,14 +32,27 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 					// New feature.
 					if IsRedemptionEnabled() {
 						if stickerRedeemable {
-							handleGPT(event, message.Text)
+							handleGPT(GPT_Complete, event, message.Text)
 							stickerRedeemable = false
 						} else {
 							handleRedeemRequestMsg(event)
 						}
 					} else {
 						// Original one
-						handleGPT(event, message.Text)
+						handleGPT(GPT_Complete, event, message.Text)
+					}
+				} else if strings.Contains(message.Text, ":draw") {
+					// New feature.
+					if IsRedemptionEnabled() {
+						if stickerRedeemable {
+							handleGPT(GPT_Draw, event, message.Text)
+							stickerRedeemable = false
+						} else {
+							handleRedeemRequestMsg(event)
+						}
+					} else {
+						// Original one
+						handleGPT(GPT_Draw, event, message.Text)
 					}
 				} else if strings.EqualFold(message.Text, ":list_all") && isGroupEvent(event) {
 					handleListAll(event)
@@ -85,7 +98,7 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleSumAll(event *linebot.Event) {
-	// 把聊天群組裡面的訊息都捲出來（依照先後順序）
+	// Scroll through all the messages in the chat group (in chronological order).
 	oriContext := ""
 	q := summaryQueue.ReadGroupInfo(getGroupID(event))
 	for _, m := range q {
@@ -127,16 +140,29 @@ func handleListAll(event *linebot.Event) {
 	}
 }
 
-func handleGPT(event *linebot.Event, message string) {
-	reply := gptCompleteContext(message)
-
-	if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
-		log.Print(err)
+func handleGPT(action GPT_ACTIONS, event *linebot.Event, message string) {
+	switch action {
+	case GPT_Complete:
+		reply := gptCompleteContext(message)
+		if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+			log.Print(err)
+		}
+	case GPT_Draw:
+		if reply, err := gptImageCreate(message); err != nil {
+			if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("無法正確顯示圖形.")).Do(); err != nil {
+				log.Print(err)
+			}
+		} else {
+			if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("根據你的提示，畫出以下圖片："), linebot.NewImageMessage(reply, reply)).Do(); err != nil {
+				log.Print(err)
+			}
+		}
 	}
+
 }
 
 func handleRedeemRequestMsg(event *linebot.Event) {
-	// 先取得使用者 Display Name (也就是顯示的名稱)
+	// First, obtain the user's Display Name (i.e., the name displayed).
 	userName := event.Source.UserID
 	userProfile, err := bot.GetProfile(event.Source.UserID).Do()
 	if err == nil {
