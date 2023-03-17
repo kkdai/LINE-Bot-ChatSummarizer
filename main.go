@@ -19,11 +19,11 @@ import (
 	"os"
 
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	gpt3 "github.com/sashabaranov/go-openai"
+	"github.com/sashabaranov/go-openai"
 )
 
 var bot *linebot.Client
-var client *gpt3.Client
+var client *openai.Client
 var summaryQueue GroupDB
 var stickerRedeemable bool
 var enableRedeem string
@@ -61,7 +61,7 @@ func main() {
 	apiKey := os.Getenv("ChatGptToken")
 
 	if apiKey != "" {
-		client = gpt3.NewClient(apiKey)
+		client = openai.NewClient(apiKey)
 	}
 
 	http.HandleFunc("/callback", callbackHandler)
