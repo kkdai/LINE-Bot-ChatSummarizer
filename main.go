@@ -31,6 +31,14 @@ var enableRedeem string
 const RedeemStickerPID = "789"
 const RedeemStickerSID = "10856"
 
+type GPT_ACTIONS int
+
+const (
+	GPT_Complete GPT_ACTIONS = 0
+	GPT_Draw     GPT_ACTIONS = 1
+	GPT_Whister  GPT_ACTIONS = 2
+)
+
 func main() {
 	stickerRedeemable = false
 	var err error
@@ -38,7 +46,7 @@ func main() {
 	// Enable new feature (YES, default no)
 	enableRedeem = os.Getenv("REDEEM_ENABLE")
 
-	//  如果有預設 DABTASE_URL 就建立 PostGresSQL; 反之則建立 Mem DB
+	//  If DABTASE_URL is preset, create PostGresSQL; otherwise, create Mem DB.
 	pSQL := os.Getenv("DATABASE_URL")
 	if pSQL != "" {
 		summaryQueue = NewPGSql(pSQL)

@@ -25,6 +25,8 @@ English version, please check [ENGLISH Version](README_en.md)
 
 - `:gpt xxx`: 直接對 ChatGPT 來對談，可以直接問他。
 
+- `:draw xxx`: 請他根據你輸入的文字來畫圖給你。
+
 - `:list_all`: 列出群組的訊息紀錄（all)
 
 - `:sum_all`: 幫你做訊息摘要。
