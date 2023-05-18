@@ -34,9 +34,10 @@ const RedeemStickerSID = "10856"
 type GPT_ACTIONS int
 
 const (
-	GPT_Complete GPT_ACTIONS = 0
-	GPT_Draw     GPT_ACTIONS = 1
-	GPT_Whister  GPT_ACTIONS = 2
+	GPT_Complete      GPT_ACTIONS = 0
+	GPT_Draw          GPT_ACTIONS = 1
+	GPT_Whister       GPT_ACTIONS = 2
+	GPT_GPT4_Complete GPT_ACTIONS = 3
 )
 
 func main() {

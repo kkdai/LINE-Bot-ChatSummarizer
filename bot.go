@@ -41,6 +41,19 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 						// Original one
 						handleGPT(GPT_Complete, event, message.Text)
 					}
+				} else if strings.Contains(message.Text, ":gpt4") {
+					// New feature.
+					if IsRedemptionEnabled() {
+						if stickerRedeemable {
+							handleGPT(GPT_GPT4_Complete, event, message.Text)
+							stickerRedeemable = false
+						} else {
+							handleRedeemRequestMsg(event)
+						}
+					} else {
+						// Original one
+						handleGPT(GPT_GPT4_Complete, event, message.Text)
+					}
 				} else if strings.Contains(message.Text, ":draw") {
 					// New feature.
 					if IsRedemptionEnabled() {
@@ -120,7 +133,7 @@ func handleSumAll(event *linebot.Event) {
 
 	// 就是請 ChatGPT 幫你總結
 	oriContext = fmt.Sprintf("幫我總結 `%s`", oriContext)
-	reply := gptCompleteContext(oriContext)
+	reply := gptGPT3CompleteContext(oriContext)
 
 	// 因為 ChatGPT 可能會很慢，所以這邊後來用 SendMsg 來發送私訊給使用者。
 	if _, err = bot.PushMessage(event.Source.UserID, linebot.NewTextMessage(reply)).Do(); err != nil {
@@ -143,7 +156,12 @@ func handleListAll(event *linebot.Event) {
 func handleGPT(action GPT_ACTIONS, event *linebot.Event, message string) {
 	switch action {
 	case GPT_Complete:
-		reply := gptCompleteContext(message)
+		reply := gptGPT3CompleteContext(message)
+		if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
+			log.Print(err)
+		}
+	case GPT_GPT4_Complete:
+		reply := gptGPT3CompleteContext(message)
 		if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 			log.Print(err)
 		}

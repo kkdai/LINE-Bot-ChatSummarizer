@@ -8,14 +8,24 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
-func gptCompleteContext(ori string) (ret string) {
+// gptGPT3CompleteContext: Call GPT3.5 API
+func gptGPT3CompleteContext(ori string) (ret string) {
+	return gptCompleteContext(ori, openai.GPT3Dot5Turbo0301)
+}
+
+// gptGPT4CompleteContext: Call GPT4 API
+func gptGPT4CompleteContext(ori string) (ret string) {
+	return gptCompleteContext(ori, openai.GPT4)
+}
+
+func gptCompleteContext(ori string, model string) (ret string) {
 	// Get the context.
 	ctx := context.Background()
 
 	// For more details about the API of Open AI Chat Completion: https://platform.openai.com/docs/guides/chat
 	req := openai.ChatCompletionRequest{
 		// Model: The GPT-4 model is the most powerful model available.
-		Model: openai.GPT4,
+		Model: model,
 		// The message to complete.
 		Messages: []openai.ChatCompletionMessage{{
 			Role:    openai.ChatMessageRoleUser,
