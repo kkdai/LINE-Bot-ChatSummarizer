@@ -10,7 +10,7 @@ import (
 
 // gptGPT3CompleteContext: Call GPT3.5 API
 func gptGPT3CompleteContext(ori string) (ret string) {
-	return gptCompleteContext(ori, openai.GPT3Dot5Turbo0301)
+	return gptCompleteContext(ori, openai.GPT3Dot5Turbo)
 }
 
 // gptGPT4CompleteContext: Call GPT4 API
