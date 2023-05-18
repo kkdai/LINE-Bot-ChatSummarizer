@@ -161,7 +161,7 @@ func handleGPT(action GPT_ACTIONS, event *linebot.Event, message string) {
 			log.Print(err)
 		}
 	case GPT_GPT4_Complete:
-		reply := gptGPT3CompleteContext(message)
+		reply := gptGPT4CompleteContext(message)
 		if _, err := bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(reply)).Do(); err != nil {
 			log.Print(err)
 		}
